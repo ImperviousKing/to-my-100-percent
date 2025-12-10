@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>100% of Us – 1st Anniversary</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="theme-color" content="#9370db" />
   <link rel="manifest" href="manifest.webmanifest" />
   <style>
@@ -12,22 +12,26 @@
       margin: 0;
       padding: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
       min-height: 100vh;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
       /* COUPLE PHOTO BACKGROUND */
       background-image: url("couple-photo.jpg");
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
+      background-attachment: fixed;
       position: relative;
       color: #1f1b24;
       overflow-y: auto;
       overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+      padding: 10px;
     }
 
     /* Soft overlay for readability */
@@ -47,7 +51,8 @@
       padding: 24px 20px 28px;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
       position: relative;
-      overflow: hidden;
+      overflow: visible;
+      margin: 10px auto;
     }
 
     h1, h2 {
@@ -613,10 +618,193 @@
       gap: 6px;
     }
 
-    @media (max-width: 700px) {
+    /* Mobile optimizations */
+    @media (max-width: 768px) {
+      body {
+        padding: 0;
+        align-items: flex-start;
+        background-attachment: scroll;
+      }
+
+      body::before {
+        background-attachment: scroll;
+      }
+
       .app {
         border-radius: 0;
-        height: 100vh;
+        padding: 16px 14px 20px;
+        margin: 0;
+        min-height: 100vh;
+        max-width: 100%;
+      }
+
+      h1 {
+        font-size: 1.6rem;
+      }
+
+      h2 {
+        font-size: 1.2rem;
+      }
+
+      p {
+        font-size: 0.9rem;
+        line-height: 1.5;
+      }
+
+      button {
+        padding: 12px 20px;
+        font-size: 0.95rem;
+        min-height: 44px; /* Touch target size */
+      }
+
+      .progress-wrapper {
+        gap: 6px;
+        margin-bottom: 12px;
+      }
+
+      .progress-label {
+        font-size: 0.9rem;
+      }
+
+      .progress-ring {
+        width: 100px;
+        height: 100px;
+      }
+
+      .progress-text {
+        font-size: 0.85rem;
+      }
+
+      .card {
+        padding: 12px;
+        margin-top: 12px;
+      }
+
+      .memory-image,
+      .gallery-image,
+      .gallery-video {
+        max-height: 300px;
+      }
+
+      .input-row {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      input[type="text"] {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px; /* Prevents zoom on iOS */
+      }
+
+      .scratch-area {
+        height: 200px;
+        padding: 12px;
+      }
+
+      .collage-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      }
+
+      .collage-item.portrait {
+        grid-column: 3;
+        grid-row: 1 / span 3;
+      }
+
+      .gallery-nav {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .gallery-nav-btn {
+        width: 100%;
+      }
+
+      .final-letter {
+        padding: 12px;
+        font-size: 0.9rem;
+      }
+
+      .splash-title {
+        font-size: 1.6rem;
+      }
+
+      .splash-sub {
+        font-size: 0.85rem;
+        max-width: 240px;
+      }
+
+      .drag-area {
+        padding: 12px;
+      }
+
+      .key,
+      .lock {
+        min-width: 60px;
+        min-height: 60px;
+        touch-action: manipulation;
+      }
+
+      .music-toggle {
+        min-height: 44px;
+        padding: 10px 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .app {
+        padding: 12px 10px 16px;
+      }
+
+      h1 {
+        font-size: 1.4rem;
+      }
+
+      h2 {
+        font-size: 1.1rem;
+      }
+
+      .progress-ring {
+        width: 80px;
+        height: 80px;
+      }
+
+      .memory-image,
+      .gallery-image,
+      .gallery-video {
+        max-height: 250px;
+      }
+
+      .collage-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .collage-item.portrait {
+        grid-column: 1;
+        grid-row: auto;
+        aspect-ratio: 1;
+      }
+
+      .screen {
+        overflow: visible;
+      }
+
+      .screen.active {
+        display: block;
+        overflow: visible;
+      }
+    }
+
+    /* Prevent horizontal scroll on mobile */
+    @media (max-width: 768px) {
+      html, body {
+        overflow-x: hidden;
+        width: 100%;
+      }
+
+      .app {
+        overflow-x: hidden;
       }
     }
 
