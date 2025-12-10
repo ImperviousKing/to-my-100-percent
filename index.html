@@ -1,0 +1,1516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>100% of Us – 1st Anniversary</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#9370db" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /* COUPLE PHOTO BACKGROUND */
+      background-image: url("couple-photo.jpg");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      position: relative;
+      color: #1f1b24;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    /* Soft overlay for readability */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at top, rgba(144, 238, 144, 0.5), rgba(34, 139, 34, 0.6));
+      z-index: -1;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 700px;
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: 24px;
+      padding: 24px 20px 28px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+      position: relative;
+      overflow: hidden;
+    }
+
+    h1, h2 {
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 1.9rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+
+    h2 {
+      font-size: 1.35rem;
+      margin-bottom: 0.4rem;
+      font-weight: 600;
+    }
+
+    p {
+      margin-top: 0.3rem;
+      margin-bottom: 0.4rem;
+      line-height: 1.5;
+      font-size: 0.98rem;
+      text-align: center;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      background: linear-gradient(135deg, #9370db, #8b00ff);
+      color: #fff;
+      font-weight: 600;
+      margin-top: 10px;
+      display: block;
+      width: 100%;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+      box-shadow: 0 10px 20px rgba(147, 112, 219, 0.35);
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 24px rgba(147, 112, 219, 0.4);
+    }
+
+    button:active {
+      transform: translateY(1px) scale(0.98);
+      box-shadow: 0 6px 12px rgba(147, 112, 219, 0.3);
+    }
+
+    .progress-wrapper {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      margin-bottom: 16px;
+      margin-top: 8px;
+      gap: 8px;
+    }
+
+    .progress-label {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #333;
+      flex-shrink: 0;
+    }
+
+    .progress-ring-container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .progress-ring {
+      width: 120px;
+      height: 120px;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .progress-ring svg {
+      transform: rotate(-90deg);
+    }
+
+    .progress-ring__background {
+      stroke: #e6e6fa;
+      stroke-width: 8;
+      fill: transparent;
+    }
+
+    .progress-ring__circle {
+      stroke: url(#grad);
+      stroke-width: 8;
+      fill: transparent;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.4s ease;
+    }
+
+    .progress-text {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #333;
+      flex-shrink: 0;
+    }
+
+    .screen {
+      display: none;
+      animation: slideFadeIn 0.4s ease;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    /* Smooth transitions */
+    @keyframes slideFadeIn {
+      from { opacity: 0; transform: translateY(16px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .card {
+      margin-top: 14px;
+      background: #fff;
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    }
+
+    .memory-image {
+      width: 100%;
+      border-radius: 14px;
+      max-height: 500px;
+      height: auto;
+      object-fit: contain;
+      margin-bottom: 10px;
+      transition: filter 0.5s ease, transform 0.4s ease;
+      background: #f5f5f5;
+      display: block;
+    }
+
+    .blurred {
+      filter: blur(12px);
+    }
+
+    .memory-image:not(.blurred) {
+      transform: scale(1.02);
+    }
+
+    .caption {
+      font-size: 0.9rem;
+      color: #555;
+      margin-bottom: 4px;
+      text-align: center;
+    }
+
+    .input-row {
+      margin-top: 12px;
+      display: flex;
+      gap: 8px;
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    input[type="text"] {
+      border-radius: 999px;
+      border: 1px solid #f3b3c4;
+      padding: 8px 14px;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    input[type="text"]:focus {
+      border-color: #9370db;
+      box-shadow: 0 0 0 2px rgba(147, 112, 219, 0.25);
+    }
+
+    .feedback {
+      margin-top: 8px;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    .feedback.ok {
+      color: #25a35a;
+    }
+    .feedback.bad {
+      color: #cc345b;
+    }
+
+    .scratch-area {
+      position: relative;
+      width: 100%;
+      max-width: 360px;
+      aspect-ratio: 4 / 3;
+      max-height: 260px;
+      background: #e6e6fa;
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 12px;
+      margin: 0 auto;
+    }
+
+    .scratch-cover {
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        45deg,
+        #d6d6d6,
+        #d6d6d6 10px,
+        #c0c0c0 10px,
+        #c0c0c0 20px
+      );
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #444;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-shadow: 0 1px 2px rgba(255,255,255,0.7);
+      transition: opacity 0.6s ease;
+    }
+
+    .scratch-cover.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .drag-area {
+      margin-top: 12px;
+      padding: 16px;
+      border-radius: 18px;
+      background: #d8bfd8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .drag-row {
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .key {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 20%, #fff, #dda0dd);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      cursor: grab;
+      transition: transform 0.2s ease;
+    }
+
+    .key:active {
+      transform: scale(1.05);
+    }
+
+    .lock {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 20%, #fff, #9370db);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      position: relative;
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+    }
+
+    .lock.glow {
+      box-shadow: 0 0 18px rgba(147, 112, 219, 0.7);
+      transform: scale(1.05);
+    }
+
+    .final-letter {
+      margin-top: 14px;
+      background: #f5f0ff;
+      border-radius: 18px;
+      padding: 16px 14px;
+      border: 1px solid #dda0dd;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .small-label {
+      font-size: 0.8rem;
+      opacity: 0.8;
+      text-align: center;
+      margin-top: 6px;
+    }
+
+    /* Gallery/Slideshow styles */
+    .gallery-container {
+      margin-top: 14px;
+      position: relative;
+    }
+
+    .gallery-slide {
+      display: none;
+      animation: slideFadeIn 0.5s ease;
+    }
+
+    .gallery-slide.active {
+      display: block;
+    }
+
+    .gallery-image {
+      width: 100%;
+      border-radius: 14px;
+      max-height: 400px;
+      height: auto;
+      object-fit: contain;
+      margin-bottom: 12px;
+      background: #f5f5f5;
+      display: block;
+    }
+
+    .gallery-video {
+      width: 100%;
+      border-radius: 14px;
+      max-height: 400px;
+      height: auto;
+      object-fit: contain;
+      margin-bottom: 12px;
+      background: #f5f5f5;
+      display: block;
+    }
+
+    .gallery-caption {
+      background: #f5f0ff;
+      border-radius: 14px;
+      padding: 14px;
+      margin-top: 8px;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      text-align: center;
+      border: 1px solid #dda0dd;
+      color: #333;
+    }
+
+    .gallery-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 16px;
+      gap: 12px;
+    }
+
+    .gallery-nav-btn {
+      flex: 1;
+      padding: 10px 16px;
+      font-size: 0.9rem;
+      background: linear-gradient(135deg, #9370db, #8b00ff);
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      box-shadow: 0 6px 16px rgba(255, 118, 150, 0.3);
+    }
+
+    .gallery-nav-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 20px rgba(147, 112, 219, 0.4);
+    }
+
+    .gallery-nav-btn:active {
+      transform: translateY(1px) scale(0.98);
+    }
+
+    .gallery-nav-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .gallery-counter {
+      font-size: 0.85rem;
+      color: #666;
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    /* Collage styles */
+    .collage-container {
+      margin-top: 14px;
+    }
+
+    .collage-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr) 1fr;
+      grid-auto-rows: minmax(140px, auto);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .collage-item {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1;
+      overflow: hidden;
+      border-radius: 12px;
+      background: #f5f5f5;
+    }
+
+    .collage-item:not(.portrait) {
+      grid-column: auto;
+    }
+
+    .collage-item.portrait {
+      grid-column: 3;
+      grid-row: 1 / span 3;
+      aspect-ratio: auto;
+      min-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .collage-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .collage-item.portrait img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .collage-caption {
+      background: #f5f0ff;
+      border-radius: 14px;
+      padding: 14px;
+      margin-top: 8px;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      text-align: center;
+      border: 1px solid #dda0dd;
+      color: #333;
+    }
+
+    /* Splash screen overlay */
+    .splash {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at top, rgba(144, 238, 144, 0.7), rgba(34, 139, 34, 0.8));
+      background-image: url("couple-photo.jpg");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      color: #f7fff5;
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
+      animation: splashFadeIn 0.6s ease;
+    }
+
+    .splash-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+
+    .splash-sub {
+      font-size: 0.95rem;
+      opacity: 0.9;
+      text-align: center;
+      max-width: 260px;
+    }
+
+    .heart-loader {
+      margin-top: 16px;
+      font-size: 1.8rem;
+      animation: beat 1s infinite ease-in-out;
+    }
+
+    .splash-progress {
+      width: min(320px, 80vw);
+      margin-top: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .splash-progress-label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #0f2f0f;
+    }
+
+    .splash-progress-bar {
+      width: 100%;
+      height: 12px;
+      background: rgba(255, 255, 255, 0.65);
+      border-radius: 999px;
+      overflow: hidden;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.12);
+    }
+
+    .splash-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #90ee90, #228b22);
+      border-radius: 999px;
+      transition: width 0.2s ease;
+    }
+
+    .splash-fade-out {
+      animation: splashFadeOut 0.8s ease forwards;
+    }
+
+    @keyframes splashFadeIn {
+      from { opacity: 0; transform: scale(1.02); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes splashFadeOut {
+      to { opacity: 0; transform: translateY(-10px); visibility: hidden; }
+    }
+
+    @keyframes beat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.18); }
+    }
+
+    /* Music button */
+    .music-toggle {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      font-size: 0.8rem;
+      padding: 6px 12px;
+      width: auto;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 0.9);
+      color: #9370db;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    @media (max-width: 700px) {
+      .app {
+        border-radius: 0;
+        height: 100vh;
+      }
+    }
+
+    /* Pixie dust particles */
+    .pixie-dust {
+      position: fixed;
+      pointer-events: none;
+      width: 8px;
+      height: 8px;
+      background: radial-gradient(circle, #dda0dd, #9370db, #8b00ff);
+      border-radius: 50%;
+      z-index: 9999;
+      animation: pixieFloat 1.5s ease-out forwards;
+      box-shadow: 0 0 6px rgba(138, 43, 226, 0.8), 0 0 12px rgba(147, 112, 219, 0.6);
+    }
+
+    @keyframes pixieFloat {
+      0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1) rotate(0deg);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(var(--dx), var(--dy)) scale(0.3) rotate(360deg);
+      }
+    }
+
+    /* Sparkle effect for clicks */
+    .sparkle {
+      position: fixed;
+      pointer-events: none;
+      width: 4px;
+      height: 4px;
+      background: #dda0dd;
+      border-radius: 50%;
+      z-index: 9999;
+      animation: sparkleBurst 0.8s ease-out forwards;
+      box-shadow: 0 0 8px #9370db, 0 0 16px #8b00ff;
+    }
+
+    @keyframes sparkleBurst {
+      0% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 0.8;
+        transform: scale(2);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(0) translate(var(--sx), var(--sy));
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Splash Screen -->
+  <div class="splash" id="splash">
+    <div class="splash-title">100% of Us</div>
+    <div class="splash-sub">Loading our memories… Please wait, Mesh. 💗</div>
+    <div class="heart-loader">💗</div>
+    <div class="splash-progress">
+      <div class="splash-progress-label" id="splashProgressLabel">0%</div>
+      <div class="splash-progress-bar">
+        <div class="splash-progress-fill" id="splashProgressFill"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="app">
+    <!-- Music toggle -->
+    <button class="music-toggle" id="musicToggle">
+      <span id="musicIcon">🔇</span> <span id="musicLabel">Music Off</span>
+    </button>
+
+    <!-- Hidden audio (background music) -->
+    <!-- Put bg-music.mp3 in the same folder -->
+    <audio id="bgMusic" src="bg-music.mp3" loop></audio>
+    <!-- Audio for timelapse video -->
+    <audio id="timelapseMusic" src="timelapse.mp3"></audio>
+
+    <!-- Progress UI -->
+    <div class="progress-wrapper">
+      <div class="progress-label">Progress</div>
+      <div class="progress-ring-container">
+        <div class="progress-ring">
+          <svg width="120" height="120">
+            <defs>
+              <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#dda0dd" />
+                <stop offset="100%" stop-color="#9370db" />
+              </linearGradient>
+            </defs>
+            <circle class="progress-ring__background" cx="60" cy="60" r="48"></circle>
+            <circle class="progress-ring__circle" cx="60" cy="60" r="48"></circle>
+          </svg>
+        </div>
+        <div class="progress-text" id="progressText">0%</div>
+      </div>
+    </div>
+
+    <!-- INTRO -->
+    <div class="screen active" id="screen-intro">
+      <h1>100% of Us</h1>
+      <p>
+        Our first year wasn't just a year — it was a journey filled with memories, surprises, late-night talks, overnights, cuddles, even lots of sexy times plus those little moments we each share that somehow became everything.<br><br>
+        Complete the challenges and reach <strong>100%</strong> to unlock what my heart has been keeping for you.
+      </p>
+      <button id="startBtn">Start the Journey</button>
+      <p class="small-label">Happy 1st Anniversary, Rhacxell Mesh 💗</p>
+    </div>
+
+    <!-- STAGE 1 -->
+    <div class="screen" id="screen-1">
+      <h2>Stage 1 — Do You Remember This?</h2>
+      <p>
+        <strong>What city is this picture taken?</strong><br>
+        <em>Hint: One of our Core Memories together.</em>
+      </p>
+      <div class="card">
+        <img id="memoryImage"
+          class="memory-image blurred"
+          src="cebu-hotel.jpeg"
+          alt="Cebu hotel - Core Memory" />
+
+        <div class="input-row" style="margin-top: 16px;">
+          <input type="text" id="cityInput" placeholder="Type the city name…" />
+          <button id="checkCityBtn">Check Answer</button>
+        </div>
+
+        <div class="feedback" id="cityFeedback"></div>
+        <div id="hintsContainer" style="margin-top: 12px;"></div>
+        <button id="cityContinueBtn" style="display:none;">Continue to Next Stage</button>
+      </div>
+    </div>
+
+    <!-- STAGE 2 -->
+    <div class="screen" id="screen-2">
+      <h2>Stage 2 — Name the Place</h2>
+      <p>You don’t need to be a genius.<br>You just need to remember where we rested together.</p>
+      <div class="card">
+        <p><em>
+          Waves hum in the dark,<br>
+          Stars listen to our whispers,<br>
+          Where were we that night?
+        </em></p>
+
+        <img id="silhouetteImage" 
+          class="memory-image blurred" 
+          src="silhoutte.jpeg" 
+          alt="Beach silhouette memory" 
+          style="display:block; margin-top: 12px; margin-bottom: 8px;" />
+
+        <div class="input-row">
+          <input type="text" id="riddleInput" placeholder="Type your answer…" />
+          <button id="checkRiddleBtn">Check Answer</button>
+        </div>
+
+        <div class="feedback" id="riddleFeedback"></div>
+        <button id="riddleContinueBtn" style="display:none;">Continue</button>
+      </div>
+    </div>
+
+    <!-- STAGE 3 -->
+    <div class="screen" id="screen-3">
+      <h2>Stage 3 — Scratch to Reveal</h2>
+      <p>Scratch the card — there’s something I want you to remember.</p>
+
+      <div class="card">
+        <div class="scratch-area">
+          <img id="scratchImage"
+            class="memory-image blurred"
+            src="cafe-sa-bukid.jpeg"
+            alt="Cafe sa Bukid memory"
+            style="width:100%; height:100%; object-fit: cover; position:absolute; inset:0;" />
+          <div class="scratch-cover" id="scratchCover">
+            Tap to scratch ✨
+          </div>
+          <div>
+            <p>
+              I still think about that night in Dauin.<br>
+              The waves were quiet, the stars were soft,<br>
+              and we were lying on my jacket like the world slowed down just for us.
+            </p>
+          </div>
+        </div>
+
+        <p class="small-label" id="scratchCaption" style="display:none; margin-top: 10px;">
+          I still think about that day we went up the mountain to Tan-awan Coffee Shop — the sandy and rocky roads,
+          the long climb, and how exciting it felt just getting there together. It wasn’t an easy journey, but somehow
+          every step felt lighter because it was with you. I’m sorry for all the times I couldn’t drive you myself,
+          but thank you for staying, for trusting the journey, and for choosing to ride (you the driver) it with me
+          anyway. That day wasn’t just about the view or the coffee — it was about us, sharing an adventure, turning
+          something simple into a memory I’ll always carry in my heart.
+        </p>
+
+        <button id="scratchNextBtn" style="display:none;">Next Stage</button>
+      </div>
+    </div>
+
+    <!-- STAGE 4 -->
+    <div class="screen" id="screen-4">
+      <h2>Stage 4 — Unlock My Heart</h2>
+      <p>Drag the key into the lock to open the final part of this journey.</p>
+
+      <div class="drag-area">
+        <div class="drag-row">
+          <div class="key" id="key" draggable="true">🔑</div>
+          <div class="lock" id="lock">💗</div>
+        </div>
+        <p class="small-label">You’ve always had the key anyway.</p>
+        <div class="feedback" id="dragFeedback"></div>
+      </div>
+    </div>
+
+    <!-- GALLERY SCREEN -->
+    <div class="screen" id="screen-gallery">
+      <h2>Our Memories Together</h2>
+      <p>Take a journey through the moments that made us who we are.</p>
+
+      <div class="gallery-container">
+        <!-- Slide 1: 5 of us -->
+        <div class="gallery-slide active" data-slide="0">
+          <img src="5 of us.jpeg" alt="5 of us" class="gallery-image" />
+          <div class="gallery-caption">
+            Those moments that I didn't expect that receiving gifts that much is such a great feeling of joy that I felt for the first time.
+          </div>
+        </div>
+
+        <!-- Slide 2: robotics -->
+        <div class="gallery-slide" data-slide="1">
+          <img src="robotics.JPG" alt="Robotics" class="gallery-image" />
+          <div class="gallery-caption">
+            These are the days when I got close to the 4 of you to whom I didn't expect to happen.
+          </div>
+        </div>
+
+        <!-- Slide 3: cafe2 -->
+        <div class="gallery-slide" data-slide="2">
+          <img src="cafe2.jpeg" alt="Cafe in Ayungon" class="gallery-image" />
+          <div class="gallery-caption">
+            The days when we went to the top of ayungon where we enjoyed the view and the time lapse of our moments together will be forever etched in my heart. We both love the taste of their kropik.
+          </div>
+        </div>
+
+        <!-- Slide 4: pengwing -->
+        <div class="gallery-slide" data-slide="3">
+          <img src="pengwing.jpg" alt="Pengwing" class="gallery-image" />
+          <div class="gallery-caption">
+            This is your spiritual animal, I know you love pengwing so much. - the cutest thing ever hooded in green.
+          </div>
+        </div>
+
+        <!-- Slide 5: sg days -->
+        <div class="gallery-slide" data-slide="4">
+          <img src="sg days.jpeg" alt="SG Days" class="gallery-image" />
+          <div class="gallery-caption">
+            While I am browsing my gallery, I saw this picture when the FPACC back then use my phone to copy their files to send it to their iPad via ShareIt. I know for sure that you are in one of the picture and surely I find one (there are more other pictures). I know this is one of your core memories in HS - your SSG days in Grade 11.
+          </div>
+        </div>
+
+        <!-- Slide 6: ichiraku -->
+        <div class="gallery-slide" data-slide="5">
+          <img src="ichiraku.jpeg" alt="Ichiraku" class="gallery-image" />
+          <div class="gallery-caption">
+            This is one of our dating sites though you can't finish the whole bowl but we know we love the ramen here. Let's get back to this place some time soon.
+          </div>
+        </div>
+
+        <!-- Slide 7: beau -->
+        <div class="gallery-slide" data-slide="6">
+          <img src="beau.jpg" alt="Beau" class="gallery-image" />
+          <div class="gallery-caption">
+            The cat is so adorable — from its curious eyes to the way it tilts its head — that no one who sees it can help but smile. Her favorite pose when sleeping is such one of the most adorable thing to see. Beau misses you naaa. I miss her tooo.
+          </div>
+        </div>
+
+        <!-- Slide 8: fubida -->
+        <div class="gallery-slide" data-slide="7">
+          <img src="fubida.jpeg" alt="Fubida" class="gallery-image" />
+          <div class="gallery-caption">
+            This is one of your moments that you champion innovation. I know how creative you can be. Use this to best the challenges of life as a nursing student.
+          </div>
+        </div>
+
+        <!-- Slide 9: timelapse video -->
+        <div class="gallery-slide" data-slide="8" data-video-slide="true">
+          <video class="gallery-video" id="timelapseVideo" src="Timelapse.mp4" controls></video>
+          <div class="gallery-caption">
+            The time we enjoyed singing together while you are waiting for your online meeting. I love spending time with you.
+          </div>
+        </div>
+
+        <!-- Slide 10: grad pic -->
+        <div class="gallery-slide" data-slide="9">
+          <img src="grad pic.jpeg" alt="Graduation" class="gallery-image" />
+          <div class="gallery-caption">
+            This is it. The culmination of your high school life. I know you got anxious and pressured in life as you carry the burden of being the eldest daughter. I know life is tough, I am always be here for you.
+          </div>
+        </div>
+
+        <div class="gallery-nav">
+          <button class="gallery-nav-btn" id="galleryPrevBtn">← Previous</button>
+          <button class="gallery-nav-btn" id="galleryNextBtn">Next →</button>
+        </div>
+        <div class="gallery-counter">
+          <span id="galleryCounter">1 / 9</span>
+        </div>
+        <button id="galleryContinueBtn" style="display:none; margin-top: 12px;">Continue to Cebu Memories</button>
+      </div>
+    </div>
+
+    <!-- COLLAGE SCREEN -->
+    <div class="screen" id="screen-collage">
+      <h2>Our Cebu Adventure</h2>
+      <p>A collection of moments from one of our best trips together.</p>
+
+      <div class="collage-container">
+        <div class="collage-grid">
+          <!-- Right side: Portrait spanning 3 rows (positioned first but styled to appear on right) -->
+          <div class="collage-item portrait">
+            <img src="culmination of cebu trip.jpeg" alt="Culmination of Cebu trip" />
+          </div>
+          <!-- Left side: Gallery format (2 columns, 3 rows) -->
+          <div class="collage-item">
+            <img src="Cebu - bus.jpeg" alt="Cebu bus" />
+          </div>
+          <div class="collage-item">
+            <img src="couple-photo.jpg" alt="Couple photo" />
+          </div>
+          <div class="collage-item">
+            <img src="Cebu - ele.jpeg" alt="Cebu ele" />
+          </div>
+          <div class="collage-item">
+            <img src="photo booth.jpeg" alt="Photo booth" />
+          </div>
+          <div class="collage-item">
+            <img src="my queen.jpeg" alt="My queen" />
+          </div>
+          <div class="collage-item">
+            <img src="my-forever-queen.jpg" alt="My forever queen" />
+          </div>
+        </div>
+
+        <div class="collage-caption">
+          Our Cebu trip was one of the best moments of our first year together. My queen, my forever queen of my heart — cheers to many more journeys and destinations with you.
+        </div>
+
+        <button id="collageContinueBtn" style="margin-top: 16px;">Continue to Final Message</button>
+      </div>
+    </div>
+
+    <!-- FINAL SCREEN -->
+    <div class="screen" id="screen-final">
+      <h2>You Reached 100% of Us</h2>
+      <p>Thank you for this year, Mesh. Here’s what I’ve been wanting to tell you.</p>
+
+      <div class="final-letter">
+        <p><strong>My langging, Meshhh,</strong></p>
+
+        <p>
+          One year ago, neither of us imagined that a simple Robotics competition would bring us this close. It's funny how something so technical and innovative, filled with research, codes, design, and circuits, could spark something so warm and gentle between us. But it did. And today, I'm grateful for it more than anything. I truly feel safest when I'm with you.
+        </p>
+
+        <p>
+          I keep replaying our memories, especially our Cebu adventure. Traveling from Dumaguete and staying together so you could fly to Manila from Mactan showed me more of who you are and made me fall even deeper. I still smile when I think about how clumsy I was, especially that moment when I tripped and got scratches on my knees and surrounding areas. Thank you for taking care of me.
+        </p>
+
+        <p>
+          I often think about that spontaneous night in Dauin, when you wrote in your IG note about wanting to go to the beach and I simply said, "Let's go." There were no plans and no questions, just us. Lying under the stars with you and using my jacket as our blanket felt like a quiet miracle, one that I know I'll never forget.
+        </p>
+
+        <p>
+          I also remember the time we did paint-by-numbers together at Kayong's Inn. I genuinely enjoyed doing that with you, sharing that calm, simple moment side by side. I'll forever cherish those memories, even though we can't visit Kayong's Inn anymore, for reasons we both understand. It makes me a little sad because it was such a nice place to stay, but at least we were able to make beautiful memories there together.
+        </p>
+
+        <p>
+          And then there were all our small escapes. The cheap hotels, your old dorm, cuddles, movies, and your warmth beside me. Those simple moments made me realize something important. I don't need anything grand. With you, even the simplest places feel warm and even the quietest days feel full. I want to be with you every single day.
+        </p>
+
+        <p>
+          Thank you for loving me, choosing me, trusting me, and sharing your days with me. I love you more deeply than any letter can hold and more honestly than any words can explain.
+        </p>
+
+        <p>
+          Happy 1st Anniversary, Langggg.<br>
+          <strong>Your langging,<br>Panpan</strong>
+        </p>
+      </div>
+
+      <button onclick="goToScreen('screen-intro'); setProgress(0);">Replay the Journey</button>
+      <p class="small-label">You’re my favorite 100%.</p>
+    </div>
+  </div>
+
+  <script>
+    // Background music controls (declared early for use in splash)
+    const bgMusic = document.getElementById('bgMusic');
+    const musicToggle = document.getElementById('musicToggle');
+    const musicIcon = document.getElementById('musicIcon');
+    const musicLabel = document.getElementById('musicLabel');
+    let musicOn = true; // Music on by default
+
+    function updateMusicUI() {
+      if (musicOn) {
+        musicIcon.textContent = "🔊";
+        musicLabel.textContent = "Music On";
+      } else {
+        musicIcon.textContent = "🔇";
+        musicLabel.textContent = "Music Off";
+      }
+    }
+
+    // Function to start BGM
+    function startBGM() {
+      if (!musicOn && bgMusic && bgMusic.paused) {
+        bgMusic.play().then(() => {
+          musicOn = true;
+          updateMusicUI();
+        }).catch((err) => {
+          console.log('BGM play failed:', err);
+        });
+      }
+    }
+
+    // Splash logic
+    const splash = document.getElementById('splash');
+    const splashProgressFill = document.getElementById('splashProgressFill');
+    const splashProgressLabel = document.getElementById('splashProgressLabel');
+
+    function updateSplashProgress(value) {
+      const safeValue = Math.min(100, Math.max(0, value));
+      splashProgressFill.style.width = `${safeValue}%`;
+      splashProgressLabel.textContent = `${Math.round(safeValue)}%`;
+    }
+
+    window.addEventListener('load', () => {
+      let splashProgress = 0;
+      updateSplashProgress(0);
+
+      const stepInterval = setInterval(() => {
+        splashProgress = Math.min(100, splashProgress + (Math.random() * 6 + 3));
+        updateSplashProgress(splashProgress);
+
+        if (splashProgress >= 100) {
+          clearInterval(stepInterval);
+          setTimeout(() => {
+            splash.classList.add('splash-fade-out');
+            setTimeout(() => {
+              splash.style.display = 'none';
+              // Force start music after splash (user has interacted with page)
+              bgMusic.play().then(() => {
+                musicOn = true;
+                updateMusicUI();
+              }).catch((err) => {
+                console.log('BGM autoplay after splash failed:', err);
+                musicOn = false;
+                updateMusicUI();
+              });
+            }, 800);
+          }, 400);
+        }
+      }, 180);
+    });
+
+    // Progress ring
+    const circle = document.querySelector('.progress-ring__circle');
+    const radius = circle.r.baseVal.value;
+    const circumference = 2 * Math.PI * radius;
+    circle.style.strokeDasharray = `${circumference} ${circumference}`;
+    circle.style.strokeDashoffset = circumference;
+
+    const progressText = document.getElementById('progressText');
+    let currentProgress = 0;
+
+    function setProgress(percent) {
+      currentProgress = percent;
+      const offset = circumference - (percent / 100) * circumference;
+      circle.style.strokeDashoffset = offset;
+      let label = `${percent}%`;
+      if (percent === 0) label += " — Just getting started.";
+      else if (percent === 20) label += " — First memory unlocked.";
+      else if (percent === 40) label += " — Getting closer.";
+      else if (percent === 60) label += " — More than halfway there.";
+      else if (percent === 80) label += " — Almost at 100%.";
+      else if (percent === 100) label += " — You did it!";
+      progressText.textContent = label;
+    }
+
+    function goToScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      
+      // Stop timelapse music and video when leaving gallery
+      if (id !== 'screen-gallery') {
+        if (timelapseMusic) {
+          timelapseMusic.pause();
+          timelapseMusic.currentTime = 0;
+        }
+        if (timelapseVideo) {
+          timelapseVideo.pause();
+          timelapseVideo.currentTime = 0;
+        }
+        // Resume BGM if music was on
+        if (musicOn && bgMusic.paused) {
+          bgMusic.play().catch(() => {});
+        }
+      }
+    }
+
+
+    musicToggle.addEventListener('click', () => {
+      if (!musicOn) {
+        startBGM();
+      } else {
+        bgMusic.pause();
+        // Also pause timelapse music if playing
+        if (timelapseMusic && !timelapseMusic.paused) {
+          timelapseMusic.pause();
+        }
+        musicOn = false;
+        updateMusicUI();
+      }
+    });
+
+    const startBtn = document.getElementById('startBtn');
+    startBtn.addEventListener('click', () => {
+      goToScreen('screen-1');
+      // Try to start music when she taps "Start"
+      startBGM();
+    });
+
+    // Stage 1
+    const memoryImage = document.getElementById('memoryImage');
+    const cityInput = document.getElementById('cityInput');
+    const checkCityBtn = document.getElementById('checkCityBtn');
+    const cityFeedback = document.getElementById('cityFeedback');
+    const hintsContainer = document.getElementById('hintsContainer');
+    const cityContinueBtn = document.getElementById('cityContinueBtn');
+    let stage1Done = false;
+    let hintIndex = 0;
+    
+    const hints = [
+      "💡 Hint: We travel via bus to reach this place.",
+      "💡 Hint: Barge travel was part of our journey.",
+      "💡 Hint: We stayed at an AirBnb here."
+    ];
+
+    checkCityBtn.addEventListener('click', () => {
+      const answer = cityInput.value.trim().toLowerCase();
+      if (!answer) return;
+
+      const validAnswers = ["cebu", "cebu city"];
+      
+      if (validAnswers.includes(answer)) {
+        memoryImage.classList.remove('blurred');
+        cityFeedback.textContent = "Yes! Cebu — one of our core memories together. 💗";
+        cityFeedback.className = "feedback ok";
+        cityContinueBtn.style.display = 'block';
+        hintsContainer.innerHTML = '';
+      } else {
+        cityFeedback.textContent = "Not quite right. Try again! 🥺";
+        cityFeedback.className = "feedback bad";
+        
+        if (hintIndex < hints.length) {
+          const hintDiv = document.createElement('div');
+          hintDiv.className = 'feedback';
+          hintDiv.style.color = '#666';
+          hintDiv.style.fontSize = '0.9rem';
+          hintDiv.style.marginTop = '8px';
+          hintDiv.textContent = hints[hintIndex];
+          hintsContainer.appendChild(hintDiv);
+          hintIndex++;
+        }
+      }
+    });
+
+    // Allow Enter key to submit
+    cityInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        checkCityBtn.click();
+      }
+    });
+
+    cityContinueBtn.addEventListener('click', () => {
+      if (!stage1Done) {
+        setProgress(20);
+        stage1Done = true;
+      }
+      goToScreen('screen-2');
+    });
+
+    // Stage 2
+    const riddleInput = document.getElementById('riddleInput');
+    const checkRiddleBtn = document.getElementById('checkRiddleBtn');
+    const riddleFeedback = document.getElementById('riddleFeedback');
+    const riddleContinueBtn = document.getElementById('riddleContinueBtn');
+    const silhouetteImage = document.getElementById('silhouetteImage');
+    let stage2Done = false;
+
+    checkRiddleBtn.addEventListener('click', () => {
+      const answer = riddleInput.value.trim().toLowerCase();
+      if (!answer) return;
+
+      const valid = [
+        "dauin", "dauin beach", "dauin shore"
+      ];
+
+      if (valid.includes(answer)) {
+        riddleFeedback.textContent = "Yes. We were in Dauin — lying on the beach together that quiet, perfect night.";
+        riddleFeedback.className = "feedback ok";
+        silhouetteImage.classList.remove('blurred');
+        riddleContinueBtn.style.display = 'block';
+      } else {
+        riddleFeedback.textContent = "Almost! Try again 🥺";
+        riddleFeedback.className = "feedback bad";
+      }
+    });
+
+    riddleContinueBtn.addEventListener('click', () => {
+      if (!stage2Done) {
+        setProgress(40);
+        stage2Done = true;
+      }
+      goToScreen('screen-3');
+    });
+
+    // Stage 3
+    const scratchCover = document.getElementById('scratchCover');
+    const scratchNextBtn = document.getElementById('scratchNextBtn');
+    const scratchImage = document.getElementById('scratchImage');
+    const scratchCaption = document.getElementById('scratchCaption');
+    let stage3Done = false;
+
+    scratchCover.addEventListener('click', () => {
+      scratchCover.classList.add('hidden');
+      scratchImage.classList.remove('blurred');
+      scratchCaption.style.display = 'block';
+      scratchNextBtn.style.display = 'block';
+    });
+
+    scratchNextBtn.addEventListener('click', () => {
+      if (!stage3Done) {
+        setProgress(60);
+        stage3Done = true;
+      }
+      goToScreen('screen-4');
+    });
+
+    // Stage 4
+    const keyEl = document.getElementById('key');
+    const lockEl = document.getElementById('lock');
+    const dragFeedback = document.getElementById('dragFeedback');
+    let stage4Done = false;
+
+    lockEl.addEventListener('dragover', (e) => {
+      e.preventDefault();
+    });
+
+    lockEl.addEventListener('drop', (e) => {
+      e.preventDefault();
+      if (!stage4Done) {
+        lockEl.classList.add('glow');
+        dragFeedback.textContent = "Unlocked. You've always had the key.";
+        dragFeedback.className = "feedback ok";
+        stage4Done = true;
+        setProgress(80);
+        setTimeout(() => {
+          goToScreen('screen-gallery');
+        }, 900);
+      }
+    });
+
+    keyEl.addEventListener('dragstart', () => {
+      dragFeedback.textContent = "";
+    });
+
+    // Gallery/Slideshow
+    const gallerySlides = document.querySelectorAll('.gallery-slide');
+    const galleryPrevBtn = document.getElementById('galleryPrevBtn');
+    const galleryNextBtn = document.getElementById('galleryNextBtn');
+    const galleryCounter = document.getElementById('galleryCounter');
+    const galleryContinueBtn = document.getElementById('galleryContinueBtn');
+    let currentSlide = 0;
+    const totalSlides = gallerySlides.length;
+
+    const timelapseVideo = document.getElementById('timelapseVideo');
+    const timelapseMusic = document.getElementById('timelapseMusic');
+
+    function updateGallery() {
+      gallerySlides.forEach((slide, index) => {
+        slide.classList.toggle('active', index === currentSlide);
+      });
+
+      galleryPrevBtn.disabled = currentSlide === 0;
+      galleryNextBtn.disabled = currentSlide === totalSlides - 1;
+      galleryCounter.textContent = `${currentSlide + 1} / ${totalSlides}`;
+
+      // Handle music switching for video slide
+      const activeSlide = gallerySlides[currentSlide];
+      const isVideoSlide = activeSlide && activeSlide.hasAttribute('data-video-slide');
+      
+      if (isVideoSlide) {
+        // Pause BGM and play timelapse music
+        if (musicOn && bgMusic) {
+          bgMusic.pause();
+        }
+        // Play timelapse music (only if BGM was on)
+        if (musicOn && timelapseMusic) {
+          timelapseMusic.play().catch((err) => {
+            console.log('Timelapse music play failed:', err);
+          });
+        }
+        // Play video
+        if (timelapseVideo) {
+          timelapseVideo.play().catch((err) => {
+            console.log('Video play failed:', err);
+          });
+        }
+      } else {
+        // Resume BGM if music was on
+        if (musicOn && bgMusic && bgMusic.paused) {
+          bgMusic.play().catch((err) => {
+            console.log('BGM resume failed:', err);
+          });
+        }
+        // Stop timelapse music
+        if (timelapseMusic && !timelapseMusic.paused) {
+          timelapseMusic.pause();
+          timelapseMusic.currentTime = 0;
+        }
+        // Pause video
+        if (timelapseVideo && !timelapseVideo.paused) {
+          timelapseVideo.pause();
+          timelapseVideo.currentTime = 0;
+        }
+      }
+
+      // Show continue button on last slide
+      if (currentSlide === totalSlides - 1) {
+        galleryContinueBtn.style.display = 'block';
+      } else {
+        galleryContinueBtn.style.display = 'none';
+      }
+    }
+
+    galleryPrevBtn.addEventListener('click', () => {
+      if (currentSlide > 0) {
+        currentSlide--;
+        updateGallery();
+      }
+    });
+
+    galleryNextBtn.addEventListener('click', () => {
+      if (currentSlide < totalSlides - 1) {
+        currentSlide++;
+        updateGallery();
+      }
+    });
+
+    galleryContinueBtn.addEventListener('click', () => {
+      goToScreen('screen-collage');
+    });
+
+    // Collage
+    const collageContinueBtn = document.getElementById('collageContinueBtn');
+    collageContinueBtn.addEventListener('click', () => {
+      setProgress(100);
+      goToScreen('screen-final');
+    });
+
+    // Initialize gallery when screen is shown
+    const galleryScreen = document.getElementById('screen-gallery');
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+          if (galleryScreen.classList.contains('active')) {
+            currentSlide = 0;
+            updateGallery();
+          }
+        }
+      });
+    });
+    observer.observe(galleryScreen, { attributes: true });
+
+    // Init
+    setProgress(0);
+    updateMusicUI();
+    
+    // Ensure BGM volume is set
+    bgMusic.volume = 0.7;
+    timelapseMusic.volume = 0.7;
+
+    // Try to start music automatically (may be blocked by browser autoplay policy)
+    bgMusic.play().then(() => {
+      musicOn = true;
+      updateMusicUI();
+    }).catch((err) => {
+      // Autoplay blocked - will need user interaction
+      console.log('BGM autoplay blocked, waiting for user interaction:', err);
+      musicOn = false;
+      updateMusicUI();
+      
+      // Start music on first user interaction
+      const startMusicOnInteraction = () => {
+        startBGM();
+        document.removeEventListener('click', startMusicOnInteraction);
+        document.removeEventListener('touchstart', startMusicOnInteraction);
+      };
+      document.addEventListener('click', startMusicOnInteraction, { once: true });
+      document.addEventListener('touchstart', startMusicOnInteraction, { once: true });
+    });
+
+    // PWA: register service worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
+    }
+
+    // Purple pixie dust effect
+    let lastPixieTime = 0;
+    const pixieDelay = 50; // milliseconds between particles on mouse move
+
+    function createPixieDust(x, y, isClick = false) {
+      const particleCount = isClick ? 12 : 3;
+      
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = isClick ? 'sparkle' : 'pixie-dust';
+        
+        // Random direction and distance
+        const angle = (Math.PI * 2 * i) / particleCount + (Math.random() - 0.5) * 0.5;
+        const distance = isClick ? 30 + Math.random() * 40 : 20 + Math.random() * 30;
+        const dx = Math.cos(angle) * distance;
+        const dy = Math.sin(angle) * distance;
+        
+        particle.style.left = x + 'px';
+        particle.style.top = y + 'px';
+        particle.style.setProperty('--dx', dx + 'px');
+        particle.style.setProperty('--dy', dy + 'px');
+        
+        if (isClick) {
+          particle.style.setProperty('--sx', dx + 'px');
+          particle.style.setProperty('--sy', dy + 'px');
+        }
+        
+        // Random size variation
+        const size = isClick ? (4 + Math.random() * 4) : (6 + Math.random() * 4);
+        particle.style.width = size + 'px';
+        particle.style.height = size + 'px';
+        
+        // Random animation duration
+        const duration = isClick ? 0.6 + Math.random() * 0.4 : 1 + Math.random() * 0.8;
+        particle.style.animationDuration = duration + 's';
+        
+        document.body.appendChild(particle);
+        
+        // Remove particle after animation
+        setTimeout(() => {
+          if (particle.parentNode) {
+            particle.parentNode.removeChild(particle);
+          }
+        }, duration * 1000);
+      }
+    }
+
+    // Mouse move pixie dust
+    document.addEventListener('mousemove', (e) => {
+      const now = Date.now();
+      if (now - lastPixieTime > pixieDelay) {
+        createPixieDust(e.clientX, e.clientY, false);
+        lastPixieTime = now;
+      }
+    });
+
+    // Click sparkle effect
+    document.addEventListener('click', (e) => {
+      createPixieDust(e.clientX, e.clientY, true);
+    });
+
+    // Touch events for mobile
+    document.addEventListener('touchstart', (e) => {
+      const touch = e.touches[0];
+      createPixieDust(touch.clientX, touch.clientY, true);
+    });
+
+    document.addEventListener('touchmove', (e) => {
+      const touch = e.touches[0];
+      const now = Date.now();
+      if (now - lastPixieTime > pixieDelay) {
+        createPixieDust(touch.clientX, touch.clientY, false);
+        lastPixieTime = now;
+      }
+    });
+  </script>
+</body>
+</html>

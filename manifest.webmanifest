@@ -1,0 +1,15 @@
+{
+  "name": "100% of Us – 1st Anniversary",
+  "short_name": "100% of Us",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#ffdde1",
+  "theme_color": "#ff9aa2",
+  "icons": [
+    {
+      "src": "couple-photo.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}
